@@ -143,3 +143,110 @@ function rgb(r, g, b) {
         return item > 15 ? item.toString(16).toUpperCase() : "0" + item.toString(16).toUpperCase();
     }).join("");
 }
+
+
+// data structure
+class Node {
+    constructor(data, next = null) {
+        this.data = data;
+        this.next = next;
+    }
+}
+class LinkedList {
+    constructor() {
+        this.head = null;
+        this.tail = null;
+    }
+
+    append(data) {
+        const node = new Node(data);
+
+        if (this.tail) {
+            this.tail.next = node;
+        }
+
+        if (!this.head) {
+            this.head = node;
+        }
+
+        this.tail = node;
+    }
+
+    prepand(data) {
+        const node = new Node(data, this.head);
+
+        if (!this.tail) {
+            this.tail = node;
+        }
+
+        this.head = node;
+    }
+
+    insertAfter(after, data) {
+        const found = this.find(after);
+
+        if (!found) {
+            return;
+        }
+
+        found.next = new Node(data, found.next);
+    }
+
+    find(data) {
+        if (!this.head) {
+            return;
+        }
+
+        let current = this.head;
+        while (current) {
+            if (current.data === data) {
+                return current;
+            }
+            current = current.next;
+        }
+    }
+
+    toArray() {
+        if (!this.head) {
+            return [];
+        }
+        const result = [];
+        let current = this.head;
+
+        while(current) {
+            result.push(current.data);
+            current = current.next;
+        }
+        return result;
+    }
+
+    remove(data) {
+        if (!this.head) {
+            return;
+        }
+
+        while(this.head && this.head.data === data) {
+            this.head = this.head.next;
+        }
+
+        let current = this.head;
+        while(current.next) {
+            if (current.next.data === data) {
+                current.next = current.next.next;
+            }
+            current = current.next;
+        }
+        if (this.tail.data === data) {
+            this.tail = current;
+        }
+    }
+}
+
+const list = new LinkedList();
+list.append("world");
+list.prepand("hi");
+list.append("!");
+list.insertAfter("world", "qwe");
+list.remove("qwe");
+console.log(list);
+console.log(list.toArray());
